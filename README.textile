@@ -4,43 +4,45 @@ Blatantly attempting to subsume the cachet of the noSQL movement, noHtml is a po
 
 h2. So what does it do
 
-jquery-nohtml has a very simple purpose
-* create dom elements directly in javascript
-* merge json and nohtml template easily
-* bind event handlers directly within templates
-* assign jquery data to elements within templates
-* automatically escapes text (nohtml is invulnerable to "XSS":https://www.owasp.org/index.php/Cross-site_Scripting_(XSS) )
+jquery-nohtml has a very simple manifesto
+* provide a templating language which
+** merges templates and data easily
+** but does not get in the way of the expressiveness javascript,
+** protects me from "security vulnerabilities":https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)
+** and allows event binding directly within templates
+** while still being blindingly fast
 
 h2. Give me a simple example
 
-Each nohtml template is simply a plain old javascript object. The format of object _looks_ like the html you want to produce
+Each noHtml template is simply a plain old javascript object. The format of object looks like the html you want to produce
 
-pre. // the template
-  var welcome = { tag: "DIV", cls: "welcome", text: "Hello World!" };
-// using the template
-  $( welcome ).appendTo( "#target" );
+pre.   // the template
+var welcome = { tag: "DIV", cls: "welcome", text: "Hello World!" };
+  // using the template
+$( welcome ).appendTo( "#target" );
 
 h2. How do I comibine templates and JSON
 
 Where noHtml really shines is working with data. Typically to do this we define a function 
 
-pre. // the template
-  function welcome(name) {
-    return { tag: "DIV", cls: "welcome", text: "Hello " + name };
-  }
-// using the template
-  $( welcome("Ben") ).appendTo( "#target" );
+pre.   // the template
+function welcome(name) {
+  return { tag: "DIV", cls: "welcome", text: "Hello " + name };
+}
+ 
+  // using the template
+$( welcome("Ben") ).appendTo( "#target" );
 
 h2. Whats so good about that?
 
 You will notice a few things that are different from other templating languages.
-* there are no angle brackets < > anywhere
+* there are no angle brackets < anywhere >
 * it's all javascript / json
 * the template is passed directly to the jquery constructor
 
-_The_ reason that noHtml is so powerful is that it is *all* javascript. Standard templating languages force you to do things like <% name %> or ${name} in the middle of a string of html, to get at javascript. Things that should be easy like looping, calling functions and accessing variables is _hard_.
+_The_ reason that noHtml is so powerful is that it is *all* javascript. Standard templating languages force you to do things like <% name %> or ${name} in the middle of a string of html, to get at javascript. Things that should be easy like looping, calling functions and accessing variables are _hard_.
 
-This plug-in elevates templates to the status of first class constructors in jquery, and all jquery methods and plugins that accept HTML strings, also accept noHtml templates.
+To make using noHtml easier we have elevates templates to the status of first class constructors in jquery, and all jquery methods and plugins that accept HTML strings, also accept noHtml templates.
 
 h2. What attributes can a template object have?
 
@@ -96,58 +98,58 @@ eg @child: document.getElementById("foo")@
 eg @children: $("#fruit LI.edible")@
 * @Array@ an array of any of the above types (including mixing types) causes created or matched elements to be added as children of the element
 eg @children: [ "This is a ", { tag: "B", text: "big" }, "deal!", { tag: "BR" } ]@
+* @false@, @null@, @undefined@ these are treated as a no-op and ignored. This can be useful if you want to conditionally include some markup in a template
+eg @children: [ this.label, ( this.required ? { tag: "SPAN", cls: "required", text: "*"} : null ) ]@
 
-usually you use @text@ for strings, @child@ for any single element and @children@ for an array of elements
+As a metter of convention, use @text@ for strings, @child@ for any single element and @children@ for an array of elements
 
 h2. Looping?
 
 While you can create nohtml templates using stardard @for(;;)@ or @while()@ style loops, your templates will look extra sexy using the "map":https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/map function
 
-pre. // an unordered list of fruit
+pre.   // an unordered list of fruit
 var fruits = [ "Apple", "Pear", "Guava", "Rockmelon", "Sapote" ];
-// the template
+  // the template
 function unorderedList(list) {
-	return { tag: "UL", children: list.map(function(item) {
-		return { tag: "LI", text: item };
-	} ) };
+  return { tag: "UL", children: list.map(function(item) {
+    return { tag: "LI", text: item };
+  } ) };
 }
-// using the template
+  // using the template
 $( unorderedList( fruits ) ).appendTo( "#target" );
 
 pre. // create a table
 function table(data) {
-	return { tag: "TABLE", children: [
-		{ tag: "TBODY", children: data.rows.map( function(row) {
-			return { tag: "TR", children: row.map( function( cell ) {
-				return { tag: "TD", text: cell };
-			} ) };
-		} ) }
-	] };
+  return { tag: "TABLE", children: [
+    { tag: "TBODY", children: data.rows.map( function(row) {
+      return { tag: "TR", children: row.map( function( cell ) {
+        return { tag: "TD", text: cell };
+      } ) };
+    } ) }
+  ] };
 }
 
-Note that the @map@ function is not natively available in some older browser (eg IE7), but can be implemented "very easily":https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/map#Compatibility
+Note that the @map@ function is not natively available in some older browser (eg IE7), but can be "easily implemented":https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/map#Compatibility
 
 h2. Templates and Inheritance
 
 One of the truly sucky things about any other templating language is how infexible they are. Sure you can combine a template with some json and produce something nice. NoHtml templates allow you to go further. Because noHtml templates _are_ themselves json data, you can inject the templates into other template, and generally manipulate the templates with the full power of javascript.
 
-pre. // very simpe example of template inheritance
-// textField
+pre.   // very simpe example of template inheritance
+  // textField
 function textField( props ) {
-	return { tag: "INPUT", type: "text", cls: props.cls, name: props.name, value: props.val, onblur: props.validation };
+  return { tag: "INPUT", type: "text", cls: props.cls, name: props.name, value: props.val, onblur: props.validation };
 }
-// create a password field which inherits it's behaviour from the textField template
+ 
+  // create a password field which inherits it's behaviour from the textField template
 function passwordField( props ) {
-	return $.extend( textField(prop), { type: "password" });
+  return $.extend( textField(prop), { type: "password" });
 }
-
-
-
 
 h2. Recursion??
 
 Using recusion in templating is pretty rare, but of course, if you can do it in javascript, you can do it in nohtml. This neat little bit of code creates a icon with any number of overlay images, defined using a classes that mapped to a sprite. It produces HTML like
-pre.<div class="overlay-svn">
+pre. <div class="overlay-svn">
   <div class="overlay-public">
     <div class="overlay-readonly">
       <div class="overlay-xls">click to open</div>
@@ -155,28 +157,29 @@ pre.<div class="overlay-svn">
   </div>
 </div>
 
-pre. // the template
+pre.   // the template
 function docWithFeatures( features, innerContent ) {
-	return features.split( " " ).reverse().reduce( function( child, icon ) {
-		return { tag: "DIV", cls: "overlay-" + icon, child: child };
-	}, innerContent );
+  return features.split( " " ).reverse().reduce( function( child, icon ) {
+    return { tag: "DIV", cls: "overlay-" + icon, child: child };
+  }, innerContent );
 };
-// using the template
+ 
+  // using the template
 row.find(".documentName").prepend( docWithFeatures("xls readonly public svn", "click to open") );
 
 h2. Another example
 
 pre. // a hcard microformat that displays details of a person
 function hcard(person) {
-	return { tag: "DIV", cls: "vcard", children: [
-		{ tag: "SPAN", cls: "fn n", children: [
-			{ tag: "A", cls: "url", href: person.url },
-			{ tag: "SPAN", cls: "given-name", text: person.firstname },
-			{ tag: "SPAN", cls: "family-name", text: person.surname }
-		]},
-		{ tag: "SPAN", cls: "nickname", text: person.handle },
-		{ tag: "A", cls: "email", href: "mailto:" + person.email }
-	]};
+  return { tag: "DIV", cls: "vcard", children: [
+    { tag: "SPAN", cls: "fn n", children: [
+      { tag: "A", cls: "url", href: person.url },
+      { tag: "SPAN", cls: "given-name", text: person.firstname },
+      { tag: "SPAN", cls: "family-name", text: person.surname }
+    ]},
+    { tag: "SPAN", cls: "nickname", text: person.handle },
+    { tag: "A", cls: "email", href: "mailto:" + person.email }
+  ]};
 }
 
 h2. Browser Support
