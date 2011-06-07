@@ -7,7 +7,7 @@ h2. So what does it do
 jquery-nohtml has a very simple manifesto
 * provide a templating language which
 ** merges templates and data easily
-** but does not get in the way of the expressiveness javascript,
+** but does not get in the way of expressive javascript,
 ** protects me from "security vulnerabilities":https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)
 ** and allows event binding directly within templates
 ** while still being blindingly fast
@@ -21,15 +21,14 @@ var welcome = { tag: "DIV", cls: "welcome", text: "Hello World!" };
   // using the template
 $( welcome ).appendTo( "#target" );
 
-h2. How do I comibine templates and JSON
+h2. How do I combine templates and JSON
 
-Where noHtml really shines is working with data. Typically to do this we define a function 
+Where noHtml really shines is working with data. Typically to do this we define a function which returns a template
 
 pre.   // the template
 function welcome(name) {
   return { tag: "DIV", cls: "welcome", text: "Hello " + name };
 }
- 
   // using the template
 $( welcome("Ben") ).appendTo( "#target" );
 
@@ -42,7 +41,7 @@ You will notice a few things that are different from other templating languages.
 
 _The_ reason that noHtml is so powerful is that it is *all* javascript. Standard templating languages force you to do things like <% name %> or ${name} in the middle of a string of html, to get at javascript. Things that should be easy like looping, calling functions and accessing variables are _hard_.
 
-To make using noHtml easier we have elevates templates to the status of first class constructors in jquery, and all jquery methods and plugins that accept HTML strings, also accept noHtml templates.
+To make using noHtml easier we have elevated templates to the status of first class constructors in jQuery, and all jQuery methods and plugins that accept HTML strings, also accept noHtml templates.
 
 h2. What attributes can a template object have?
 
@@ -69,14 +68,14 @@ The created events are jQuery events rather than pure DOM events
 
 pre. // create a text field with inline validation
 function usernameField( val ) {
-	return { tag: "INPUT", type: "text", name: "username", value: val, onblur: function() {
-		if( $(this).val().length < 6) {
-			alert( "Your username must be at least 6 characters" );
-			$(this).addClass("error");
-		} else {
-			$(this).removeClass("error");
-		}
-	} };
+  return { tag: "INPUT", type: "text", name: "username", value: val, onblur: function() {
+    if( $(this).val().length < 6) {
+      alert( "Your username must be at least 6 characters" );
+      $(this).addClass("error");
+    } else {
+      $(this).removeClass("error");
+    }
+  } };
 }
 
 Of course, you do not have to actually define the function inline like that, you could break it out and simply refer to the function.
@@ -140,7 +139,6 @@ pre.   // very simpe example of template inheritance
 function textField( props ) {
   return { tag: "INPUT", type: "text", cls: props.cls, name: props.name, value: props.val, onblur: props.validation };
 }
- 
   // create a password field which inherits it's behaviour from the textField template
 function passwordField( props ) {
   return $.extend( textField(prop), { type: "password" });
@@ -148,14 +146,7 @@ function passwordField( props ) {
 
 h2. Recursion??
 
-Using recusion in templating is pretty rare, but of course, if you can do it in javascript, you can do it in nohtml. This neat little bit of code creates a icon with any number of overlay images, defined using a classes that mapped to a sprite. It produces HTML like
-pre. <div class="overlay-svn">
-  <div class="overlay-public">
-    <div class="overlay-readonly">
-      <div class="overlay-xls">click to open</div>
-    </div>
-  </div>
-</div>
+Using recusion in templating is pretty rare, but of course, if you can do it in javascript, you can do it in noHtml. This neat little bit of code creates a icon with any number of overlay images, defined using a classes that mapped to a sprite.
 
 pre.   // the template
 function docWithFeatures( features, innerContent ) {
@@ -163,13 +154,12 @@ function docWithFeatures( features, innerContent ) {
     return { tag: "DIV", cls: "overlay-" + icon, child: child };
   }, innerContent );
 };
- 
   // using the template
 row.find(".documentName").prepend( docWithFeatures("xls readonly public svn", "click to open") );
 
 h2. Another example
 
-pre. // a hcard microformat that displays details of a person
+pre.   // a hcard microformat that displays details of a person
 function hcard(person) {
   return { tag: "DIV", cls: "vcard", children: [
     { tag: "SPAN", cls: "fn n", children: [
@@ -189,6 +179,5 @@ jquery-nohtml should work with all browsers that jquery supports, but is specifi
 * Firefox 2+
 * Safari 3+ (including iphone)
 * Chrome 3+ (including android browsers)
-
 
 
