@@ -30,8 +30,8 @@
 					break;
 				case 'cls' :
 					el.className = obj[attr];
-				break;
-					case 'data' :
+					break;
+				case 'data' :
 					for( var data in obj.data ) {
 						$.data( el, data, obj.data[data] );
 					}

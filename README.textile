@@ -83,9 +83,9 @@ eg. @{ tag: "INPUT", ... onblur: validateUsername }@
 
 h2. Defining inner (child) elements 
 
-NoHtml provides many ways to allow chilren of elements to be created, and dom structures of any size and depth can be created
+NoHtml provides many ways to allow children of elements to be created, and dom structures of any size and depth can be created
 
-the @child@, @chilren@ and @text@ properties all do the same thing, accept various types of data and create dom nodes out of them
+the @child@, @children@ and @text@ properties all do the same thing, accept various types of data and create dom nodes out of them
 
 * @string@ if a string is provided, Text DOM node is created in the element
 eg @text: "Hello World!"@
