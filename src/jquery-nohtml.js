@@ -95,11 +95,11 @@
 		return clean( elems, context, fragment );
 	};
 
-	$.fn.init = function( selector, context ) {
+	$.fn.init = function( selector, context, rootjQuery ) {
 		if ( selector && selector.tag ) {
 			selector = create( selector, null, context );
 		}
-		return init.call( this, selector, context );
+		return init.call( this, selector, context, rootjQuery );
 	};
 
 	$.fn.init.prototype = $.fn;
