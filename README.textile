@@ -58,6 +58,9 @@ eg @onclick: function() { alert("clicked!") }@
 * @anything else@ creates an attribute on the element with the name and value passed in.
 * also @html@ allows you to set raw innerHTML of the element, this should be avoided however and is included only to support legacy systems.
 
+* @jqmData@ the src file jquery.mobile-nohtml.js is a special build of noHtml that allows adding of correctly namespaced jqueryMobile specific attributes
+eg @jqmData: { role: "page", theme: "d", backBtn: false }@
+
 h2. Binding events
 
 As described above it is possible to bind event handlers directly in the template, this is a very powerful and unique feature of nohtml templates.
