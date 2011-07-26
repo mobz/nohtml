@@ -2,7 +2,7 @@
 	// ie 6, 7 and 8 can not change the type of an input once it's created
 	$.support.writeInputType = (function() {
 		try {
-			field = document.createElement( "INPUT" );
+			var field = document.createElement( "INPUT" );
 			field.setAttribute( "type", "checkbox" );
 		} catch(e) {
 			return true;
