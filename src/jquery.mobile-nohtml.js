@@ -68,9 +68,10 @@
 			} else if(obj.nodeType === 1) {
 				el = obj;
 			} else {
-				if($.support.writeInputType && obj.tag && obj.tag.match(/input|button/i)) {
-					el = context.createElement("<"+obj.tag+" type='"+obj.type+"'" + (obj.checked ? " checked" : "") + ">");
+				if(!$.support.writeInputType && obj.tag && obj.tag.match(/input|button/i)) {
+					el = context.createElement("<"+obj.tag+" type='"+obj.type+"' name='"+obj.name+"' " + (obj.checked ? " checked" : "") + ">");
 					delete obj.type;
+                    delete obj.name;
 				} else {
 					el = context.createElement(obj.tag||'DIV');
 				}
