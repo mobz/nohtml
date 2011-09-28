@@ -91,12 +91,12 @@
 	var clean = $.clean,
 		init = $.fn.init;
 
-	$.clean = function( elems, context, fragment ) {
+	$.clean = function( elems, context, fragment, scripts ) {
 		for(var i = 0; i < elems.length; i++) {
 			if( elems[i].tag )
 				elems[i] = create( elems[i], null, context );
 		}
-		return clean( elems, context, fragment );
+		return clean( elems, context, fragment, scripts );
 	};
 
 	$.fn.init = function( selector, context, rootjQuery ) {
