@@ -1,11 +1,14 @@
 (function($, document) {
 	// ie 6, 7 and 8 can not change the type of an input once it's created
-	$.support.writeInputType = (function() {
+	$.support.useHTMLForInputType = (function() {
 		try {
 			var field = document.createElement( "INPUT" );
+			document.body.appendChild( field );
 			field.setAttribute( "type", "checkbox" );
 		} catch(e) {
 			return true;
+		} finally {
+			field.parentNode && document.body.removeChild( field );
 		}
 		return false;
 	})();
@@ -64,10 +67,10 @@
 			} else if(obj.nodeType === 1) {
 				el = obj;
 			} else {
-				if(!$.support.writeInputType && obj.tag && obj.tag.match(/input|button/i)) {
+				if($.support.useHTMLForInputType && obj.tag && obj.tag.match(/input|button/i)) {
 					el = context.createElement("<"+obj.tag+" type='"+obj.type+"' name='"+obj.name+"' " + (obj.checked ? " checked" : "") + ">");
 					delete obj.type;
-                    delete obj.name;
+					delete obj.name;
 				} else {
 					el = context.createElement(obj.tag||'DIV');
 				}

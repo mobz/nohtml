@@ -2,7 +2,7 @@ JQueryNoHtml = TestCase("jQuery.create");
 
 JQueryNoHtml.prototype = {
 	testNameSpace: function() {
-		assertThat(jQuery.support, hasMember("writeInputType"), "can't change input type feature detected");
+		assertThat(jQuery.support, hasMember("useHTMLForInputType"), "can't change input type feature detected");
 		assertThat(jQuery, hasFunction("create"), "plugin installed in jquery namespace");
 	},
 	testSimpleCreate: function() {
@@ -114,6 +114,21 @@ JQueryNoHtml.prototype = {
 		div0.after({ tag: "DIV", id: "div4", text: "div4" });
 		assertThat( harness[0].innerHTML, is('<div id="div3">div3</div><div id="div0"><div id="div2">div2</div><div id="div1">div1</div></div><div id="div4">div4</div>'), "jquery clean overloading fail");
 
+		$("#harness").remove();
+	},
+	
+	testRadioButtonSelect: function() {
+		var harness = $("<div id=\"harness\"></div>").appendTo(document.body);
+		
+		var r1 = $({ tag: "INPUT", type: "radio", name: "foo", value: "a", checked: true }).appendTo( harness );
+		var r2 = $({ tag: "INPUT", type: "radio", name: "foo", value: "b", checked: false }).appendTo( harness );
+		var r3 = $({ tag: "INPUT", type: "radio", name: "foo", value: "c" }).appendTo( harness );
+		
+		r2[0].click();	// dom click
+		assertThat( r2.attr("checked"), is( "checked" ), "clicking on radio 2 changes selected state");
+		r3[0].click();	// dom click
+		assertThat( r3.attr("checked"), is( "checked" ), "clicking on radio 3 changes selected state");
+		
 		$("#harness").remove();
 	}
 };
