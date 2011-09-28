@@ -130,5 +130,22 @@ JQueryNoHtml.prototype = {
 		assertThat( r3.attr("checked"), is( "checked" ), "clicking on radio 3 changes selected state");
 		
 		$("#harness").remove();
+	},
+	
+	testUndefTypeAndName: function() {
+		var harness = $("<div id=\"harness\"></div>").appendTo(document.body);
+		
+		var i1 = $({ tag: "INPUT" }).appendTo( harness );
+		var i2 = $({ tag: "BUTTON" }).appendTo( harness );
+		var i3 = $({ tag: "INPUT", type: "radio", name: "foo", value: "c", checked: true }).appendTo( harness );
+				
+		assertThat( i1.prop("type"), is( "text" ), "input given expected default type");
+		assertThat( i1.prop("name"), is( "" ), "input given expected default name");
+		assertThat( i2.prop("type"), is( "submit" ), "button given expected default type");
+		assertThat( i2.prop("name"), is( "" ), "button given expected default name");
+		assertThat( i3.prop("type"), is( "radio" ), "radio input works");
+		assertThat( i3.prop("name"), is( "foo" ), "radio input has name");
+		
+		$("#harness").remove();
 	}
 };

@@ -1,17 +1,17 @@
 (function($, document) {
-	// ie 6, 7 and 8 can not change the type of an input once it's created
-	$.support.useHTMLForInputType = (function() {
+	// ie 6, 7 and 8 have trouble with the type and names of dynamically created inputs
+	$.support.useHTMLForInputType = false;
+	$(function() {
 		try {
 			var field = document.createElement( "INPUT" );
 			document.body.appendChild( field );
 			field.setAttribute( "type", "checkbox" );
 		} catch(e) {
-			return true;
+			$.support.useHTMLForInputType = true;
 		} finally {
 			field.parentNode && document.body.removeChild( field );
 		}
-		return false;
-	})();
+	});
 
 	var create = $.create = (function() {
 
@@ -68,7 +68,7 @@
 				el = obj;
 			} else {
 				if($.support.useHTMLForInputType && obj.tag && obj.tag.match(/input|button/i)) {
-					el = context.createElement("<"+obj.tag+" type='"+obj.type+"' name='"+obj.name+"' " + (obj.checked ? " checked" : "") + ">");
+					el = context.createElement("<"+obj.tag + ( obj.type ? " type='"+obj.type+"'" : "" ) + ( obj.name ? " name='"+obj.name+"'" : "" ) + ( obj.checked ? " checked" : "" ) + ">");
 					delete obj.type;
 					delete obj.name;
 				} else {
