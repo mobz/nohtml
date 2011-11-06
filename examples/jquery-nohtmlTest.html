@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+  <TITLE>JQuery - NoHtml Test</TITLE>
+</HEAD>
+<BODY>
+<h1>Create DOM element with JQuery</h1>
+<DIV id='test1'></DIV>
+
+<h1>Create Simple Element with JQuery and nohtml</h1>
+<DIV id='test2'></DIV>
+
+<h1>Create Complext Element with JQuery and nohtml</h1>
+<DIV id='test3'></DIV>
+
+<h1>Test JQuery.append()</h1>
+<DIV id="test4"></DIV>
+
+<h1>Test JQuery.append() with nohtml</h1>
+<DIV id="test5"></DIV>
+
+<h1>Test Radio Button with nohtml</h1>
+<DIV id="test6"></DIV>
+
+<script src="../lib/jquery-1.6.1.js"></script>
+<script src="../src/jquery-nohtml.js"></script>
+<script>
+  $( function() {
+    // Test 1 - Create DOM element with JQuery
+    $( "<DIV>").html("Create DOM Element with JQuery").appendTo( "#test1" );
+
+    // Test 2 - Create Simple Element with JQuery and nohtml
+    $( { tag: "DIV", text: "Create Simple Element with JQuery and nohtml" } ).appendTo( "#test2" );
+
+    // Test 3 - Create Complext Element with JQuery and nohtml
+    var otherEl = jQuery( "<div class='foo'>foo</div>").get( 0 );
+    var testpoint = false;
+    jQuery(
+      { tag: "DIV", children: [
+				// use the zeroth div to test setting attributes
+				{ tag: "DIV",
+					css: { border: "1px solid black", backgroundColor: "red" },
+					cls: "class1 class2 class3",
+					random123: "attribute456",
+					id: "this_is_my_id",
+					lang: "en-AU"
+				},
+				{ tag: "DIV", children: [
+					"",
+					0,
+					true === true ? false : false,
+					undefined,
+					null,
+					{}
+				]	},
+				{ tag: "DIV",
+					id: 'datadiv',
+					onclick: function() { testpoint = true; },
+					child: { tag: "input", type: "hidden", value: "shhh" },
+					data: { foo: "bar", baz: 3, rel: otherEl }
+				},
+				{ tag: "DIV",
+					html: "<span title=\"something\">Something</span> else"
+				},
+				{ tag: "DIV", children: [
+					{ tag: 'TABLE', cls: 'atable', children: [
+						{ tag: "TBODY", children: [
+							{ tag: 'TR', children: [
+								{ tag: 'TD', text: "one" },
+								{ tag: 'TD', text: "two" },
+								{ tag: 'TD', text: "three" },
+								{ tag: 'TD', id: 'moo', text: "four" }
+							] }
+						] }
+					] }
+				] },
+				$.create( { tag: "DIV", id: "inner_create", children: $("<div>1</div><div>2</div><div>3</div>") } ),
+				otherEl
+      ] }
+    ).appendTo( "#test3" );
+    
+    $( "#test4" ).append("<div>Test 4</div>");
+
+    $( "#test5" ).append( { tag: "DIV", text: "Test 5" } );
+
+    window.test6 = jQuery({ tag: "INPUT", type:"radio" });
+    $( "#test6" ).append( test6 );
+    window.test6.click();
+  } );
+</script>
+</BODY>
+</HTML>
