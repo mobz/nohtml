@@ -1,0 +1,8 @@
+{
+	"name": "jquery.nohtml",
+	"version": "1.0",
+	"main": ["./src/jquery.nohtml.js"],
+	"dependencies": {
+		"jquery": ">=1.6.1"
+	}
+}
