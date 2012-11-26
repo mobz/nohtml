@@ -108,5 +108,11 @@
 
 	$.fn.init.prototype = $.fn;
 
+	if (typeof define === 'function' && define.amd) {
+		define(function() {
+			return create;
+		});
+	}
+
 })(jQuery, window.document);
 
