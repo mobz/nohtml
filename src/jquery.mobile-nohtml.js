@@ -70,6 +70,8 @@
 				return undefined;
 			} else if(obj.nodeType === 1) {
 				el = obj;
+			} else if(obj.jquery) {
+				el = obj[0];
 			} else {
 				if($.support.useHTMLForInputType && obj.tag && obj.tag.match(/input|button/i)) {
 					el = context.createElement("<"+obj.tag + ( obj.type ? " type='"+obj.type+"'" : "" ) + ( obj.name ? " name='"+obj.name+"'" : "" ) + ( obj.checked ? " checked" : "" ) + ">");
@@ -111,6 +113,12 @@
 	};
 
 	$.fn.init.prototype = $.fn;
+
+	if (typeof define === 'function' && define.amd) {
+		define(function() {
+			return create;
+		});
+	}
 
 })(jQuery, window.document);
 
